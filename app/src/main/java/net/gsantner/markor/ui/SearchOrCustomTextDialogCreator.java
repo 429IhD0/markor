@@ -37,6 +37,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static net.gsantner.opoc.format.todotxt.SttCommander.SttTaskSimpleComparator.BY_CONTEXT;
+import static net.gsantner.opoc.format.todotxt.SttCommander.SttTaskSimpleComparator.BY_CREATION_DATE;
+import static net.gsantner.opoc.format.todotxt.SttCommander.SttTaskSimpleComparator.BY_DESCRIPTION;
+import static net.gsantner.opoc.format.todotxt.SttCommander.SttTaskSimpleComparator.BY_DUE_DATE;
+import static net.gsantner.opoc.format.todotxt.SttCommander.SttTaskSimpleComparator.BY_LINE;
+import static net.gsantner.opoc.format.todotxt.SttCommander.SttTaskSimpleComparator.BY_PRIORITY;
+import static net.gsantner.opoc.format.todotxt.SttCommander.SttTaskSimpleComparator.BY_PROJECT;
+
 public class SearchOrCustomTextDialogCreator {
     private static boolean isTodoTxtAlternativeNaming(Context context) {
         return new AppSettings(context).isTodoTxtAlternativeNaming();
@@ -212,8 +220,8 @@ public class SearchOrCustomTextDialogCreator {
 
         dopt.callback = arg1 -> {
             appSettings.setString(optLastSelected, arg1);
-            String[] values = arg1.replace(o_context, "context").replace(o_project, "project").replace(o_prio, "priority")
-                    .replace(o_date, "date").replace(o_textline, "line").replace(o_description, "description").replace(o_duedate, "duedate")
+            String[] values = arg1.replace(o_context, BY_CONTEXT).replace(o_project, BY_PROJECT).replace(o_prio, BY_PRIORITY)
+                    .replace(o_date, BY_CREATION_DATE).replace(o_textline, BY_LINE).replace(o_description, BY_DESCRIPTION).replace(o_duedate, BY_DUE_DATE)
                     .split(" ");
             callback.callback(values[0], values[1].contains(d_desc.replace(" ", "")));
         };
@@ -350,9 +358,6 @@ public class SearchOrCustomTextDialogCreator {
 
 
     public static void showSearchDialog(Activity activity, String fullText, Callback.a1<String> userCallback) {
-        /*SearchOrCustomTextDialog.DialogOptions dopt = new SearchOrCustomTextDialog.DialogOptions();
-        baseConf(activity, dopt);
-        dopt.callback = callbackValue -> {*/
         SearchOrCustomTextDialog.DialogOptions dopt2 = new SearchOrCustomTextDialog.DialogOptions();
         baseConf(activity, dopt2);
         dopt2.callback = userCallback;
@@ -360,10 +365,20 @@ public class SearchOrCustomTextDialogCreator {
         dopt2.titleText = R.string.search_documents;
         dopt2.searchHintText = R.string.search;
         SearchOrCustomTextDialog.showMultiChoiceDialogWithSearchFilterUI(activity, dopt2);
-        /*};*/
-        /*dopt.titleText = R.string.search_documents;
-        dopt.searchHintText = R.string.search;
-        SearchOrCustomTextDialog.showMultiChoiceDialogWithSearchFilterUI(activity, dopt);*/
+    }
+
+    public static void showMarkdownHeadlineDialog(Activity activity, String fullText, Callback.a1<String> userCallback) {
+        SearchOrCustomTextDialog.DialogOptions dopt2 = new SearchOrCustomTextDialog.DialogOptions();
+        baseConf(activity, dopt2);
+        dopt2.callback = userCallback;
+        dopt2.data = filterEmpty(new ArrayList<>(Arrays.asList(fullText.split("\n"))));
+        dopt2.titleText = R.string.table_of_contents;
+        dopt2.searchHintText = R.string.search;
+        dopt2.defaultText = "^[#]+ .*";
+        dopt2.isSearchEnabled = false;
+        dopt2.searchIsRegex = true;
+        dopt2.gravity = Gravity.TOP;
+        SearchOrCustomTextDialog.showMultiChoiceDialogWithSearchFilterUI(activity, dopt2);
     }
 
     public static void showPriorityDialog(Activity activity, char selectedPriority, Callback.a1<String> callback) {
@@ -375,7 +390,7 @@ public class SearchOrCustomTextDialogCreator {
         List<String> highlightedData = new ArrayList<>();
         String none = activity.getString(R.string.none);
         availableData.add(none);
-        for (int i = ((int) 'A'); i <= ((int) 'Z'); i++) {
+        for (int i = 'A'; i <= ((int) 'Z'); i++) {
             availableData.add(Character.toString((char) i));
         }
         highlightedData.add(none);
@@ -417,7 +432,7 @@ public class SearchOrCustomTextDialogCreator {
         return data;
     }
 
-    private static void baseConf(Activity activity, SearchOrCustomTextDialog.DialogOptions dopt) {
+    public static void baseConf(Activity activity, SearchOrCustomTextDialog.DialogOptions dopt) {
         AppSettings as = new AppSettings(activity);
         dopt.isDarkDialog = as.isDarkThemeEnabled();
         dopt.textColor = ContextCompat.getColor(activity, dopt.isDarkDialog ? R.color.dark__primary_text : R.color.light__primary_text);

@@ -121,6 +121,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="files_and_folders">Ficheiros e pastas</string>
     <string name="document_browser">Explorador de ficheiros</string>
     <string name="file_browser">Explorador de ficheirosicheiros</string>
+    <string name="set_due_date">Definir data limite</string>
+    <string name="insert_replace_date">Inserir data</string>
     <string name="create_note" needed="false">Criar nota</string>
     <string name="special_documents" needed="false">Documentos especiais</string>
     <string name="keep_screen_on" needed="false">Manter ecrã ligado</string>
@@ -162,6 +164,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="highlight_line_ending_if_two_or_more_spaces">Destacar espaços no final das linhas que possuem dois ou mais espaços</string>
     <string name="use_monospace_for_code">Utilizar letra monoespaçada para código</string>
     <string name="disable_code_block_highlight">Desativar destaque para blocos de código</string>
+    <string name="auto_renumber_ordered_list">Numeração automática de listas ordenadas</string>
+    <string name="auto_renumber_ordered_list_slowdown">Esta opção pode afetar o desempenho da aplicação.</string>
     <string name="use_different_fonttype_slow_down">Utiliza um tipo de letra diferente. A alteração desta opção pode degradar o desempenho.</string>
     <string name="general">Geral</string>
     <string name="resources">Recursos</string>
@@ -370,4 +374,5 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="could_not_encrypt_file_content_the_file_was_not_saved">Não foi possível cifrar o ficheiro. Ficheiro não guardado.</string>
     <string name="could_not_decrypt_file_content_wrong_password_or_is_the_file_maybe_not_encrypted">Não foi possível decifrar o ficheiro. Utilizou a palavra-passe correta? O ficheiro foi cifrado com a cifra Markor AES?</string>
     <string name="password_already_set_setting_a_new_password_will_overwrite">A palavra-passe já está definida. Se definir uma nova palavra-passe a atual será substituída e, caso a perca, já não será possível aceder ao ficheiro.</string>
+    <string name="code_block">Bloco de código</string>
 </resources>

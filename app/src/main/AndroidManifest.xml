@@ -44,6 +44,7 @@
         android:usesCleartextTraffic="true"
         android:appCategory="productivity"
         android:isGame="false"
+        android:resizeableActivity="true"
         android:theme="@style/AppTheme.Light"
         tools:targetApi="o">
         <activity
@@ -128,7 +129,11 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".activity.DocumentRelayActivity"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:launchMode="singleTop"
+            />
         <activity
             android:name=".activity.DocumentActivity"
             android:label="@string/app_name"
@@ -580,6 +585,70 @@
                 <data
                     android:mimeType="*/*"
                     android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\..*\..*\.adoc" />
+
+                <!-- Handling of file extension ".patch" -->
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\..*\.patch" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\..*\..*\.patch" />
+
+                <!-- Handling of file extension ".diff" -->
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\..*\.diff" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\..*\..*\.diff" />
 
                 <!-- Handling of file extension ".ldg" -->
                 <data

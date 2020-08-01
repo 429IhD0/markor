@@ -31,8 +31,6 @@ import net.gsantner.opoc.util.Callback;
 import net.gsantner.opoc.util.ContextUtils;
 import net.gsantner.opoc.util.StringUtils;
 
-import java.util.Arrays;
-
 @SuppressWarnings("WeakerAccess")
 public class CommonTextActions {
     public static final int ACTION_SPECIAL_KEY__ICON = R.drawable.ic_keyboard_black_24dp;
@@ -123,6 +121,8 @@ public class CommonTextActions {
                         _hlEditor.insertOrReplaceTextOnCursor("¯\\_(ツ)_/¯");
                     } else if (callbackPayload.equals(rstr(R.string.char_punctation_mark_arrows))) {
                         _hlEditor.insertOrReplaceTextOnCursor("»«");
+                    } else if (callbackPayload.equals(rstr(R.string.select_current_line))) {
+                        _hlEditor.setSelectionExpandWholeLines();
                     }
                 });
                 return true;
@@ -227,14 +227,15 @@ public class CommonTextActions {
         Editable text = _hlEditor.getText();
 
         int[] selection = StringUtils.getSelection(_hlEditor);
+        final int[] lStart = StringUtils.getLineOffsetFromIndex(text, selection[0]);
+        final int[] lEnd = StringUtils.getLineOffsetFromIndex(text, selection[1]);
+
         int selectionStart = selection[0];
         int selectionEnd = selection[1];
 
         int lineStart = StringUtils.getLineStart(text, selectionStart);
 
-        char[] tabChars = new char[_tabWidth];
-        Arrays.fill(tabChars, ' ');
-        String tabString = new String(tabChars);
+        String tabString = StringUtils.repeatChars(' ', _tabWidth);
 
         while (lineStart <= selectionEnd) {
 
@@ -243,7 +244,7 @@ public class CommonTextActions {
                 int spaceCount = textStart - lineStart;
                 int delCount = Math.min(_tabWidth, spaceCount);
                 int delEnd = lineStart + delCount;
-                if (delCount > 0 && delEnd < text.length()) {
+                if (delCount > 0 && delEnd <= text.length()) {
                     text.delete(lineStart, delEnd);
                     selectionEnd -= delCount;
                 }
@@ -256,6 +257,10 @@ public class CommonTextActions {
             // Get next line
             lineStart = StringUtils.getLineEnd(text, lineStart, selectionEnd) + 1;
         }
+
+        _hlEditor.setSelection(
+                StringUtils.getIndexFromLineOffset(text, lStart),
+                StringUtils.getIndexFromLineOffset(text, lEnd));
     }
 
     public void moveLineBy1(boolean up) {

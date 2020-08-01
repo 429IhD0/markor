@@ -14,6 +14,7 @@ import android.support.annotation.StringRes;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import net.gsantner.markor.R;
 import net.gsantner.markor.format.general.CommonTextActions;
@@ -22,11 +23,34 @@ import net.gsantner.markor.ui.AttachImageOrLinkDialog;
 import net.gsantner.markor.ui.SearchOrCustomTextDialogCreator;
 import net.gsantner.markor.ui.hleditor.TextActions;
 import net.gsantner.opoc.util.Callback;
+import net.gsantner.opoc.util.ContextUtils;
+import net.gsantner.opoc.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class MarkdownTextActions extends TextActions {
+
+    public static final Pattern PREFIX_ORDERED_LIST = Pattern.compile("^(\\s*)((\\d+)(\\.|\\))(\\s+))");
+    public static final Pattern PREFIX_ATX_HEADING = Pattern.compile("^(\\s{0,3})(#{1,6}\\s)");
+    public static final Pattern PREFIX_QUOTE = Pattern.compile("^(>\\s)");
+    public static final Pattern PREFIX_CHECKED_LIST = Pattern.compile("^(\\s*)((-|\\*|\\+)\\s\\[(x|X)]\\s)");
+    public static final Pattern PREFIX_UNCHECKED_LIST = Pattern.compile("^(\\s*)((-|\\*|\\+)\\s\\[\\s]\\s)");
+    public static final Pattern PREFIX_UNORDERED_LIST = Pattern.compile("^(\\s*)((-|\\*|\\+)\\s)");
+    public static final Pattern PREFIX_LEADING_SPACE = Pattern.compile("^(\\s*)");
+
+    private static final Pattern[] PREFIX_PATTERNS = {
+            PREFIX_ORDERED_LIST,
+            PREFIX_ATX_HEADING,
+            PREFIX_QUOTE,
+            PREFIX_CHECKED_LIST,
+            PREFIX_UNCHECKED_LIST,
+            // Unordered has to be after checked list. Otherwise checklist will match as an unordered list.
+            PREFIX_UNORDERED_LIST,
+            PREFIX_LEADING_SPACE,
+    };
 
     public MarkdownTextActions(Activity activity, Document document) {
         super(activity, document);
@@ -34,7 +58,8 @@ public class MarkdownTextActions extends TextActions {
 
     @Override
     public boolean runAction(String action, boolean modLongClick, String anotherArg) {
-        return runCommonTextAction(action);
+        int res = new ContextUtils(_context).getResId(ContextUtils.ResType.STRING, action);
+        return new MarkdownTextActionsImpl(res).onClickImpl(null);
     }
 
     @Override
@@ -86,61 +111,94 @@ public class MarkdownTextActions extends TextActions {
         }
 
         @Override
-        public void onClick(View view) {
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+        public void onClick(final View view) {
+            onClickImpl(view);
+        }
+
+        private boolean onClickImpl(final View view) {
+            if (view != null) {
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            }
             switch (_action) {
                 case R.string.tmaid_markdown_quote: {
-                    runMarkdownRegularPrefixAction("> ");
-                    break;
+                    runPrefixReplaceAction(PREFIX_QUOTE, ">$1 ", "");
+                    return true;
                 }
                 case R.string.tmaid_markdown_h1: {
-                    runMarkdownRegularPrefixAction("# ");
-                    break;
+                    setHeadingAction(1);
+                    return true;
                 }
                 case R.string.tmaid_markdown_h2: {
-                    runMarkdownRegularPrefixAction("## ");
-                    break;
+                    setHeadingAction(2);
+                    return true;
                 }
                 case R.string.tmaid_markdown_h3: {
-                    runMarkdownRegularPrefixAction("### ");
-                    break;
+                    setHeadingAction(3);
+                    return true;
                 }
-                /*case R.string.tmaid_common_unordered_list_char: {
-                    runMarkdownRegularPrefixAction(_appSettings.getUnorderedListCharacter() + " ");
-                    break;
-                }*/
+                case R.string.tmaid_common_unordered_list_char: {
+                    final String listChar = _appSettings.getUnorderedListCharacter();
+                    final String listPrefix = "$1" + listChar + " ";
+                    runPrefixReplaceAction(PREFIX_UNORDERED_LIST, listPrefix, "$1");
+                    return true;
+                }
+                case R.string.tmaid_common_checkbox_list: {
+                    final String listChar = _appSettings.getUnorderedListCharacter();
+                    final String uncheck = "$1" + listChar + " [ ] ";
+                    final String check = "$1" + listChar + " [x] ";
+                    runPrefixReplaceAction(PREFIX_UNCHECKED_LIST, uncheck, check);
+                    return true;
+                }
+                case R.string.tmaid_common_ordered_list_number: {
+                    runPrefixReplaceAction(PREFIX_ORDERED_LIST, "$11. ", "$1");
+                    runRenumberOrderedListIfRequired();
+                    return true;
+                }
                 case R.string.tmaid_markdown_bold: {
-                    runMarkdownInlineAction("**");
-                    break;
+                    runInlineAction("**");
+                    return true;
                 }
                 case R.string.tmaid_markdown_italic: {
-                    runMarkdownInlineAction("_");
-                    break;
+                    runInlineAction("_");
+                    return true;
                 }
                 case R.string.tmaid_markdown_strikeout: {
-                    runMarkdownInlineAction("~~");
-                    break;
+                    runInlineAction("~~");
+                    return true;
                 }
                 case R.string.tmaid_markdown_code_inline: {
-                    runMarkdownInlineAction("`");
-                    break;
+                    runInlineAction("`");
+                    return true;
                 }
                 case R.string.tmaid_markdown_horizontal_line: {
-                    runMarkdownInlineAction("----\n");
-                    break;
+                    runInlineAction("----\n");
+                    return true;
                 }
                 case R.string.tmaid_markdown_table_insert_columns: {
                     SearchOrCustomTextDialogCreator.showInsertTableRowDialog(_activity, false, callbackInsertTableRow);
-                    break;
+                    return true;
                 }
                 case R.string.tmaid_markdown_insert_link:
                 case R.string.tmaid_markdown_insert_image: {
                     AttachImageOrLinkDialog.showInsertImageOrLinkDialog(_action == R.string.tmaid_markdown_insert_image ? 2 : 3, _document.getFormat(), _activity, _hlEditor, _document.getFile());
-                    break;
+                    return true;
+                }
+                case R.string.tmaid_common_toolbar_title_clicked_edit_action: {
+                    final String origText = _hlEditor.getText().toString();
+                    SearchOrCustomTextDialogCreator.showMarkdownHeadlineDialog(_activity, origText, callbackPayload -> {
+                        int cursor = origText.indexOf(callbackPayload);
+                        _hlEditor.setSelection(Math.min(_hlEditor.length(), Math.max(0, cursor)));
+                    });
+                    return true;
+                }
+                case R.string.tmaid_common_indent:
+                case R.string.tmaid_common_deindent: {
+                    runCommonTextAction(_context.getString(_action));
+                    runRenumberOrderedListIfRequired();
+                    return true;
                 }
                 default: {
-                    runCommonTextAction(_context.getString(_action));
-                    break;
+                    return runCommonTextAction(_context.getString(_action));
                 }
             }
         }
@@ -169,6 +227,19 @@ public class MarkdownTextActions extends TextActions {
                 case R.string.tmaid_markdown_table_insert_columns: {
                     SearchOrCustomTextDialogCreator.showInsertTableRowDialog(_activity, true, callbackInsertTableRow);
                     break;
+                }
+                case R.string.tmaid_markdown_code_inline: {
+                    _hlEditor.disableHighlighterAutoFormat();
+                    final int c = _hlEditor.setSelectionExpandWholeLines();
+                    _hlEditor.getText().insert(_hlEditor.getSelectionStart(), "\n```\n");
+                    _hlEditor.getText().insert(_hlEditor.getSelectionEnd(), "\n```\n");
+                    _hlEditor.setSelection(c + "\n```\n".length());
+                    _hlEditor.enableHighlighterAutoFormat();
+                    Toast.makeText(_activity, R.string.code_block, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                case R.string.tmaid_common_ordered_list_number: {
+                    MarkdownAutoFormat.renumberOrderedList(_hlEditor.getText(), StringUtils.getSelection(_hlEditor)[0]);
                 }
             }
             return false;
@@ -199,5 +270,55 @@ public class MarkdownTextActions extends TextActions {
                 _hlEditor.simulateKeyPress(KeyEvent.KEYCODE_DPAD_UP);
             }
         };
+    }
+
+
+    /**
+     * Set/unset ATX heading level on each selected line
+     * <p>
+     * This routine will make the following conditional changes
+     * <p>
+     * Line is heading of same level as requested -> remove heading
+     * Line is heading of different level that that requested -> add heading of specified level
+     * Line is not heading -> add heading of specified level
+     *
+     * @param level ATX heading level
+     */
+    private void setHeadingAction(int level) {
+
+        List<ReplacePattern> patterns = new ArrayList<>();
+
+        String heading = StringUtils.repeatChars('#', level);
+
+        // Replace this exact heading level with nothing
+        patterns.add(new ReplacePattern("^(\\s{0,3})" + heading + " ", "$1"));
+
+        // Replace other headings with commonmark-compatible leading space
+        patterns.add(new ReplacePattern(PREFIX_ATX_HEADING, "$1" + heading + " "));
+
+        // Replace all other prefixes with heading
+        for (final Pattern pp : PREFIX_PATTERNS) {
+            patterns.add(new ReplacePattern(pp, heading + "$1 "));
+        }
+
+        runRegexReplaceAction(patterns);
+    }
+
+    private void runPrefixReplaceAction(final Pattern actionPattern, final String action, final String alt) {
+
+        List<ReplacePattern> patterns = new ArrayList<>();
+
+        // Replace prefixes with action (or alt if prefix is specified action)
+        for (final Pattern pp : PREFIX_PATTERNS) {
+            patterns.add(new ReplacePattern(pp, pp == actionPattern ? alt : action));
+        }
+
+        runRegexReplaceAction(patterns);
+    }
+
+    private void runRenumberOrderedListIfRequired() {
+        if (_appSettings.isMarkdownAutoUpdateList()) {
+            MarkdownAutoFormat.renumberOrderedList(_hlEditor.getText(), StringUtils.getSelection(_hlEditor)[0]);
+        }
     }
 }

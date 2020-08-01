@@ -121,6 +121,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="files_and_folders">Filer og mapper</string>
     <string name="document_browser">Dokumentutforsker</string>
     <string name="file_browser">Filbehandler</string>
+    <string name="set_due_date">Angi forfallsdato</string>
+    <string name="insert_replace_date">Insert date</string>
     <string name="create_note" needed="false">Opprett notat</string>
     <string name="special_documents" needed="false">Spesialdokumenter</string>
     <string name="keep_screen_on" needed="false">Behold skjermen påslått</string>
@@ -162,6 +164,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="highlight_line_ending_if_two_or_more_spaces">Framhev mellomrom ved linjeslutt for linjer som inneholder to eller flere mellomrom</string>
     <string name="use_monospace_for_code">Bruk fastbreddeskrift for kode</string>
     <string name="disable_code_block_highlight">Deaktiver utheving for kodeklosser</string>
+    <string name="auto_renumber_ordered_list">Automatisk omdirigering sorterte lister</string>
+    <string name="auto_renumber_ordered_list_slowdown">Dette alternativet kan påvirke appens ytelse.</string>
     <string name="use_different_fonttype_slow_down">Bruk annen skrifttype. Endring har dynamisk innvirkning på programytelse.</string>
     <string name="general">Hovedinnstillinger</string>
     <string name="resources">Ressurser</string>
@@ -370,4 +374,5 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="could_not_encrypt_file_content_the_file_was_not_saved">Kunne ikke kryptere filinnholdet. Filen ble ikke lagret.</string>
     <string name="could_not_decrypt_file_content_wrong_password_or_is_the_file_maybe_not_encrypted">Kunne ikke dekryptere filinnhold. Har du brukt et feil passord? Er filen virkelig kryptert med Markors AES kryptering?</string>
     <string name="password_already_set_setting_a_new_password_will_overwrite">Passordet er allerede angitt. Å oppgi et nytt passord vil overskrive det eksisterende passordet, og det kan hende du ikke har tilgang til filer lenger dersom du glemmer passordet.</string>
+    <string name="code_block">Kode blokk</string>
 </resources>

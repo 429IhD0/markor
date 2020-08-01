@@ -121,6 +121,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="files_and_folders">Documentos e cartellas</string>
     <string name="document_browser">Esploradore de documentos</string>
     <string name="file_browser">Esploradore de documentos</string>
+    <string name="set_due_date">Imposta sa data de iscadèntzia</string>
+    <string name="insert_replace_date">Inserta sa data</string>
     <string name="create_note" needed="false">Crea una nota</string>
     <string name="special_documents" needed="false">Documentos ispetziales</string>
     <string name="keep_screen_on" needed="false">Mantene s\'ischermu allutu</string>
@@ -162,6 +164,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="highlight_line_ending_if_two_or_more_spaces">Evidèntzia sos ispatzios a s\'acabu de sas lìnias chi cuntenint duos o prus ispàtzios</string>
     <string name="use_monospace_for_code">Imprea unu caràtere a ispàtziu sìngulu pro su còdighe</string>
     <string name="disable_code_block_highlight">Disabìlita s\'evidentziatzione pro sos blocos de còdighe</string>
+    <string name="auto_renumber_ordered_list">Torra a numerare automaticamente sas listas ordinadas</string>
+    <string name="auto_renumber_ordered_list_slowdown">Custa optzione diat pòdere influentzare sas prestatziones de s\'aplicatzione.</string>
     <string name="use_different_fonttype_slow_down">Imprea una casta diferente de caràtere. Mudare dinamicamente sa casta de caràtere impatat sas prestatziones de s\'aplicatzione.</string>
     <string name="general">Generales</string>
     <string name="resources">Risursas</string>
@@ -370,4 +374,5 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="could_not_encrypt_file_content_the_file_was_not_saved">Tzifradura de su documentu fallida. Su documentu no est istadu sarvadu.</string>
     <string name="could_not_decrypt_file_content_wrong_password_or_is_the_file_maybe_not_encrypted">Detzifradura de su cuntenutu de su documentu fallida. As impreadu una crae isballiada? Su documentu est tzifradu cun sa critografia AES de Markor a beru?</string>
     <string name="password_already_set_setting_a_new_password_will_overwrite">Crae giai impostada. Impostende una crae noa as a subraiscrìere sa crae chi b\'est e dias pòdere no èssere prus in gradu de atzèdere a sos documentos, s\'in casu mai as a ismentigare sa crae.</string>
+    <string name="code_block">Blocu de còdighe</string>
 </resources>

@@ -121,6 +121,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="files_and_folders">Файли та директорії</string>
     <string name="document_browser">Перегляд документів</string>
     <string name="file_browser">Перегляд файлів</string>
+    <string name="set_due_date">Встановити дату завершення</string>
+    <string name="insert_replace_date">Вставити дату</string>
     <string name="create_note" needed="false">Створити нотатку</string>
     <string name="special_documents" needed="false">Особливі документи</string>
     <string name="keep_screen_on" needed="false">Не вимикати екран</string>
@@ -162,6 +164,8 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="highlight_line_ending_if_two_or_more_spaces">Підсвічувати пробіли в кінці рядків, що містять щонайменше два пробіли</string>
     <string name="use_monospace_for_code">Використовувати моноширинний шрифт для коду</string>
     <string name="disable_code_block_highlight">Вимкнути підсвічування для блоків коду</string>
+    <string name="auto_renumber_ordered_list">Автоматична зміна нумерованих списків</string>
+    <string name="auto_renumber_ordered_list_slowdown">Цей параметр може вплинути на продуктивність додатку.</string>
     <string name="use_different_fonttype_slow_down">Використовувати різні шрифти. Динамічна зміна шрифту впливає на продуктивність додатку.</string>
     <string name="general">Загальне</string>
     <string name="resources">Ресурси</string>
@@ -370,4 +374,5 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="could_not_encrypt_file_content_the_file_was_not_saved">Не вдалося зашифрувати вміст файлу. Файл не було збережено.</string>
     <string name="could_not_decrypt_file_content_wrong_password_or_is_the_file_maybe_not_encrypted">Не вдалося розшифрувати вміст файлу. Ви використовуєте неправильний пароль? Файл дійсно було зашифровано з використанням Markor AES?</string>
     <string name="password_already_set_setting_a_new_password_will_overwrite">Пароль вже встановлено. Встановлення нового пароля перезапише наявний пароль, і ви втратите доступ до файлів, якщо забудете пароль.</string>
+    <string name="code_block">Блок коду</string>
 </resources>
